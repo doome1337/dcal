@@ -9,6 +9,15 @@ def time_format(time):
     days = days + d
     return "%02d:%02d:%02d:%02d" % (days, hours, minutes, seconds)
 
+def task_format(task):
+    length = len(task)
+    # Together with the quotes and the space, 
+    # this makes 32 characters before the status.
+    if length > 29:
+        return task[0:26] + "..."
+    else:
+        return task + (" "*(29-length))
+
 now = datetime.datetime.now()
 events = []
 print
@@ -38,15 +47,18 @@ for i in range(len(events)):
 for i in events:
     if i[1] == 0:
         if i[2] > datetime.timedelta(0):
-            print '"' + i[0] + '" incomplete. ' + time_format(i[2]) + " left."
-        else:
-            print '"' + i[0] + '" OVERDUE! ' + time_format(-i[2]) + " late!"
-    elif i[1] == 1:
-        if i[2] > datetime.timedelta(0):
-            print '"' + i[0] + '" complete, but unfinished. ' \
+            print '"' + task_format(i[0]) + '" incomplete. ' \
                     + time_format(i[2]) + " left."
         else:
-            print '"' + i[0] + '" OVERDUE! ' + time_format(-i[2]) + " late!"
+            print '"' + task_format(i[0]) + '" OVERDUE! ' \
+                    + time_format(-i[2]) + " late!"
+    elif i[1] == 1:
+        if i[2] > datetime.timedelta(0):
+            print '"' + task_format(i[0]) + '" complete, but unfinished. ' \
+                    + time_format(i[2]) + " left."
+        else:
+            print '"' + task_format(i[0]) + '" OVERDUE! ' \
+                    + time_format(-i[2]) + " late!"
     else:
-        print '"' + i[0] + '" Complete!'
+        print '"' + task_format(i[0]) + '" complete!'
 print 
