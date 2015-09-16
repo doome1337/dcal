@@ -12,20 +12,20 @@ def time_format(time):
 
 def task_format(task):
     length = len(task)
-    # Together with the quotes and the space, 
+    # Together with the double dash,
     # this makes 32 characters before the status.
-    if length > 29:
-        return task[0:26] + "..."
+    if length > 30:
+        return task[0:27] + "..."
     else:
-        return task + (" "*(29-length))
+        return task + (" "*(30-length))
 
 def display(file_name):
     now = datetime.datetime.now()
     events = []
-    print
-    print "Today is " + str(now)
-    print "-----"
-    with file(file_name,"r") as calendar:
+    print ()
+    print ("Today is " + str(now))
+    print ("-----")
+    with open(file_name,"r") as calendar:
         lines = calendar.readlines()[1:]
         for line in lines:
             data = line.split(",")
@@ -49,21 +49,21 @@ def display(file_name):
     for i in events:
         if i[1] == 0:
             if i[2] > datetime.timedelta(0):
-                print '"' + task_format(i[0]) + '" incomplete. ' \
-                        + time_format(i[2]) + " left."
+                print (task_format(i[0]) + ' -- Incomplete. ' \
+                        + time_format(i[2]) + " left.")
             else:
-                print '"' + task_format(i[0]) + '" OVERDUE! ' \
-                        + time_format(-i[2]) + " late!"
+                print (task_format(i[0]) + ' -- OVERDUE! ' \
+                        + time_format(-i[2]) + " late!")
         elif i[1] == 1:
             if i[2] > datetime.timedelta(0):
-                print '"' + task_format(i[0]) + '" complete, but unfinished. ' \
-                        + time_format(i[2]) + " left."
+                print (task_format(i[0]) + ' -- To be revised. ' \
+                        + time_format(i[2]) + " left.")
             else:
-                print '"' + task_format(i[0]) + '" OVERDUE! ' \
-                        + time_format(-i[2]) + " late!"
+                print (task_format(i[0]) + ' -- OVERDUE! ' \
+                        + time_format(-i[2]) + " late!")
         else:
-            print '"' + task_format(i[0]) + '" complete!'
-    print 
+            print (task_format(i[0]) + ' -- Complete!')
+    print ()
 
 if __name__ == '__main__':
     display(sys.argv[1])
