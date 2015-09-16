@@ -1,0 +1,156 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      5109,        147]
+NotebookOptionsPosition[      4854,        133]
+NotebookOutlinePosition[      5210,        149]
+CellTagsIndexPosition[      5167,        146]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"schedule", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"SortBy", "[", 
+      RowBox[{
+       RowBox[{"Import", "[", 
+        RowBox[{
+         RowBox[{"NotebookDirectory", "[", "]"}], "<>", 
+         "\"\<planner.csv\>\""}], "]"}], ",", 
+       RowBox[{
+        RowBox[{"DateObject", "[", 
+         RowBox[{"#", "[", 
+          RowBox[{"[", 
+           RowBox[{"2", ";;", "7"}], "]"}], "]"}], "]"}], "&"}]}], "]"}], "[", 
+     RowBox[{"[", 
+      RowBox[{"2", ";;"}], "]"}], "]"}], "\[Transpose]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"tasks", "=", 
+   RowBox[{"schedule", "[", 
+    RowBox[{"[", "1", "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"dates", "=", 
+   RowBox[{"Map", "[", 
+    RowBox[{"DateObject", ",", 
+     RowBox[{
+      RowBox[{"schedule", "[", 
+       RowBox[{"[", 
+        RowBox[{"2", ";;", "7"}], "]"}], "]"}], "\[Transpose]"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"completion", "=", 
+   RowBox[{"schedule", "[", 
+    RowBox[{"[", "8", "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"For", "[", 
+  RowBox[{
+   RowBox[{"i", "=", "1"}], ",", 
+   RowBox[{"i", "\[LessEqual]", 
+    RowBox[{"Length", "[", "dates", "]"}]}], ",", 
+   RowBox[{"i", "++"}], ",", 
+   RowBox[{"If", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"completion", "[", 
+       RowBox[{"[", "i", "]"}], "]"}], "\[Equal]", "0"}], ",", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"Now", ">", 
+        RowBox[{"dates", "[", 
+         RowBox[{"[", "i", "]"}], "]"}]}], ",", 
+       RowBox[{"Print", "[", 
+        RowBox[{"StringJoin", "[", 
+         RowBox[{"\"\<YOU ARE BEHIND ON \>\"", ",", 
+          RowBox[{"tasks", "[", 
+           RowBox[{"[", "i", "]"}], "]"}]}], "]"}], "]"}], ",", 
+       RowBox[{"Print", "[", 
+        RowBox[{"StringForm", "[", 
+         RowBox[{"\"\<`1`: `2` left. Panic Level: `3`\>\"", ",", 
+          RowBox[{"tasks", "[", 
+           RowBox[{"[", "i", "]"}], "]"}], ",", 
+          RowBox[{
+           RowBox[{"dates", "[", 
+            RowBox[{"[", "i", "]"}], "]"}], "-", "Now"}], ",", 
+          RowBox[{
+           RowBox[{"Quantity", "[", "\"\<day\>\"", "]"}], "*", 
+           RowBox[{"100", "/", 
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"dates", "[", 
+               RowBox[{"[", "i", "]"}], "]"}], "-", "Now"}], ")"}]}]}]}], 
+         "]"}], "]"}], ","}], "]"}]}], "]"}]}], 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"If", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"completion", "[", 
+        RowBox[{"[", "i", "]"}], "]"}], "\[Equal]", "1"}], ",", 
+      RowBox[{"Print", "[", 
+       RowBox[{"StringJoin", "[", 
+        RowBox[{"\"\<YOU COMPLETED \>\"", ",", 
+         RowBox[{"tasks", "[", 
+          RowBox[{"[", "i", "]"}], "]"}]}], "]"}], "]"}], ","}], "]"}], 
+    RowBox[{"If", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{
+        RowBox[{"completion", "[", 
+         RowBox[{"[", "i", "]"}], "]"}], "\[Equal]", "2"}], "&&", 
+       RowBox[{"Now", ">", 
+        RowBox[{"dates", "[", 
+         RowBox[{"[", "i", "]"}], "]"}]}]}], ",", 
+      RowBox[{"Print", "[", 
+       RowBox[{"StringJoin", "[", 
+        RowBox[{"\"\<YOU HAVE CANCELLED \>\"", ",", 
+         RowBox[{"tasks", "[", 
+          RowBox[{"[", "i", "]"}], "]"}]}], "]"}], "]"}], ","}], "]"}]}], 
+   "*)"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.626388984416707*^9, 3.626389023705484*^9}, {
+   3.62638974613732*^9, 3.6263897897062187`*^9}, {3.6292188084831963`*^9, 
+   3.629218810415104*^9}, {3.6292482389289093`*^9, 3.6292482400900593`*^9}, {
+   3.629821041249393*^9, 3.6298210794323397`*^9}, {3.6298222087143626`*^9, 
+   3.6298222108487883`*^9}, {3.638706164647976*^9, 3.6387061652207212`*^9}, {
+   3.6387062518660307`*^9, 3.6387063268662987`*^9}, {3.6387064431613197`*^9, 
+   3.638706467508133*^9}, {3.6387065415661707`*^9, 3.6387065905596647`*^9}, {
+   3.6387066681412373`*^9, 3.6387067009931917`*^9}, {3.638706836446435*^9, 
+   3.638706837215528*^9}, {3.638706899919526*^9, 3.638706920736226*^9}, {
+   3.638706977976399*^9, 3.638707075487093*^9}, {3.638707907927642*^9, 
+   3.63870793871006*^9}, {3.638792101888673*^9, 3.638792103076586*^9}, 
+   3.638793365810792*^9, {3.639487119810855*^9, 3.6394871993430023`*^9}}]
+},
+WindowSize->{808, 668},
+WindowMargins->{{Automatic, 0}, {Automatic, 1}},
+FrontEndVersion->"10.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (September 9, \
+2014)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 4292, 111, 233, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)
