@@ -1,4 +1,14 @@
 import datetime
+
+def time_format(time):
+    s = time.seconds
+    d = time.days
+    minutes, seconds = divmod(s, 60)
+    hours, minutes = divmod(minutes, 60)
+    days, hours = divmod(hours, 24)
+    days = days + d
+    return "%02d:%02d:%02d:%02d" % (days, hours, minutes, seconds)
+
 now = datetime.datetime.now()
 events = []
 print
@@ -21,12 +31,22 @@ for i in range(len(events)):
             temp = events[i]
             events[i] = events[j]
             events[j] = temp
+# A list of Completion Codes:
+# 0: Incomplete
+# 1: Complete, but needs revision/submission
+# 2: Completed, submitted.
 for i in events:
     if i[1] == 0:
         if i[2] > datetime.timedelta(0):
-            print i[0] + " on time. " + str(i[2]) + " left."
+            print '"' + i[0] + '" incomplete. ' + time_format(i[2]) + " left."
         else:
-            print i[0] + " OVERDUE! " + str(-i[2]) + " late!"
+            print '"' + i[0] + '" OVERDUE! ' + time_format(-i[2]) + " late!"
+    elif i[1] == 1:
+        if i[2] > datetime.timedelta(0):
+            print '"' + i[0] + '" complete, but unfinished. ' \
+                    + time_format(i[2]) + " left."
+        else:
+            print '"' + i[0] + '" OVERDUE! ' + time_format(-i[2]) + " late!"
     else:
-        print i[0] + " Complete!"
+        print '"' + i[0] + '" Complete!'
 print 
