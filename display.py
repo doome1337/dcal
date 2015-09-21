@@ -19,7 +19,7 @@ def time_format(time):
     minutes, seconds = divmod(s, 60)
     hours, minutes = divmod(minutes, 60)
     days, hours = divmod(hours, 24)
-    days = days + d
+    days += d
     return "%02d:%02d:%02d:%02d" % (days, hours, minutes, seconds)
 
 def task_format(task):
@@ -68,9 +68,7 @@ def display(file_name):
             if (events[i][1] > events[j][1]) or \
                     (events[i][2] > events[j][2] and \
                     not events[i][1] < events[j][1]):
-                temp = events[i]
-                events[i] = events[j]
-                events[j] = temp
+                events[i],events[j] = events[j],events[i]
     # A list of Completion Codes:
     # 0: Incomplete
     # 1: Complete, but needs revision/submission
