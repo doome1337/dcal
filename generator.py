@@ -14,14 +14,10 @@ def date_gen(event):
     return event[0]+','+event_dt+',-1\n'
 
 def gen_events(gen_file,event_file):
-    with open(gen_file,'r') as schedule:
-        events = schedule.readlines()[1:]
-        event_str = []
+    with open(gen_file,'r') as schedule, open(event_file,'a'):
+        events = schedule.readlines()
         for event in events:
-            event_str.append(date_gen(event.strip().split(',')))
-    with open(event_file,'a') as calendar:
-        for es in event_str:
-            calendar.write(es)
+            calendar.write(date_gen(event.strip().split(',')))
 
 if __name__ == '__main__':
     gen_events(sys.argv[1],sys.argv[2])

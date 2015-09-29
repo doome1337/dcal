@@ -22,75 +22,52 @@ def time_format(time):
     days += d
     return "%02d:%02d:%02d:%02d" % (days, hours, minutes, seconds)
 
-def task_format(task):
-    """Formats a task name to appear correctly.
-
-    If shorter than 30 characters,
-    it is padded with spaces.
-    If longer, it cuts it down to 27 characters,
-    and adds an ellipsis.
-
-    @type time: str
-    @rtype str
-
-    >>> task_format('Hello World!')
-    'Hello World!                  '
-    >>> task_format("This line is 30 characters, yo")
-    'This line is 30 characters, yo'
-    >>> task_format("This line is way too long to fit normally.")
-    'This line is way too long t...'
-    """
-    length = len(task)
+def task_format(task,code):
+    length = len(task[0])
     # Together with the double dash,
     # this makes 32 characters before the status.
     if length > 30:
-        return task[0:27] + "..."
+        namestr = task[0][0:27] + "..."
     else:
-        return task + (" "*(30-length))
+        namestr = task[0] + (" "*(30-length))
+    curstr = namestr.join(code.split('%N'))
+    timestr = time_format(task[2])
+    return timestr.join(curstr.split('%T'))
 
-def display(file_name):
+def display(file_name, task_codes_file):
     now = datetime.datetime.now()
     events = []
+    priorities = {}
     print ("")
     print ("Today is " + str(now))
     print ("-----")
-    with open(file_name,"r") as calendar:
-        lines = calendar.readlines()[1:]
+    with open(file_name,"r") as calendar, \
+        open(task_codes_file,'r') as task_codes:
+        lines = map(lambda x:x.strip().split(','),calendar.readlines())
+        codes = map(lambda x:x.strip().split(','),task_codes.readlines())
+        for code in codes:
+            priorities[code[0]]=int(code[3])
         for line in lines:
-            data = line.split(",")
-            due_date = datetime.datetime(int(data[1]),\
-                    int(data[2]),int(data[3]),int(data[4]),\
-                    int(data[5]),int(data[6]))
+            due_date = datetime.datetime(int(line[1]),
+                    int(line[2]),int(line[3]),int(line[4]),
+                    int(line[5]),int(line[6]))
             until = due_date - now
-            events.append([data[0],int(data[7]),until])
+            events.append([line[0],line[7],until])
+    print priorities
     for i in range(len(events)):
         for j in range(i,len(events)):
-            if (events[i][1] > events[j][1]) or \
+            if (priorities[events[i][1]] > priorities[events[j][1]]) or \
                     (events[i][2] > events[j][2] and \
-                    not events[i][1] < events[j][1]):
+                    not priorities[events[i][1]] < priorities[events[j][1]]):
                 events[i],events[j] = events[j],events[i]
-    # A list of Completion Codes:
-    # 0: Incomplete
-    # 1: Complete, but needs revision/submission
-    # 2: Completed, submitted.
-    for i in events:
-        if i[1] == 0:
-            if i[2] > datetime.timedelta(0):
-                print (task_format(i[0]) + ' -- Incomplete. ' \
-                        + time_format(i[2]) + " left.")
-            else:
-                print (task_format(i[0]) + ' -- OVERDUE! ' \
-                        + time_format(-i[2]) + " late!")
-        elif i[1] == 1:
-            if i[2] > datetime.timedelta(0):
-                print (task_format(i[0]) + ' -- To be revised. ' \
-                        + time_format(i[2]) + " left.")
-            else:
-                print (task_format(i[0]) + ' -- OVERDUE! ' \
-                        + time_format(-i[2]) + " late!")
-        else:
-            print (task_format(i[0]) + ' -- Complete!')
+    for event in events:
+        for code in codes:
+            if event[1] == code[0]:
+                if event[2] > datetime.timedelta(0):
+                    print task_format(event,code[4])
+                else:
+                    print task_format(event[0:-1]+[-event[-1]],code[5])
     print ("")
 
 if __name__ == '__main__':
-    display(sys.argv[1])
+    display(sys.argv[1], sys.argv[2])

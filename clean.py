@@ -25,10 +25,11 @@ def clean(file_name,threshold=2):
     MAT157 Problem Set 2           -- To be revised. 00:03:42:03 left.
     """
     with open(file_name,'r') as calendar:
-        lines = calendar.readlines()[1:]
+        lines = calendar.readlines()
         remove = {}
         for line in lines:
-            remove[line]=int(line.strip().split(',')[-1])>=threshold
+            task_code = int(line.strip().split(',')[-1])
+            remove[line] = (task_code>=threshold or task_code == -1)
     with open(file_name,'w') as calendar:
         calendar.write('task,y,m,d,h,m,s,status\n')
         for line in lines:
@@ -38,7 +39,7 @@ def clean(file_name,threshold=2):
 if __name__ == '__main__':
     import sys
     import os
-    __DEBUG__ = True
+    __DEBUG__ = False
     if __DEBUG__:
         import display
         display.display(sys.argv[1])

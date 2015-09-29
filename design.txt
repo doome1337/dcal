@@ -53,8 +53,28 @@ Task Codes:
         These are automatically cleaned up.
 
 Generator File Format:
-    <name>,<weekday>,hour,minute,second
+    <name>,<weekday>,hour,minute,second,<delayable>
 
     <name> is the name of the task.
     <weekday> is the day of the week (0=Sunday,1=Monday,etc.)
     The next 6 represent the time of the event.
+    <delayable> indicates whether the task can be done even if delayed.
+
+Task_Code File Format:
+    <code>,<clean on time up>,<clean in general>,<priority>,<ots>,<late str>
+
+    <code> is the task code we're defining.
+    <clean on time up> determines if the task is cleaned 
+        if the deadline has passed.
+    <clean in general> determines if the task is cleaned
+        regardless of if it passed.
+    <priority> is the priority of the task.
+        Higher priority tasks are displayed higher up.
+    <ots> is the format for on-time messages.
+        These contain "%N" for task names
+        and "%T" for time until/after the task.
+        This is always positive.
+        Before or after determined by whether <ots> or <late str> used.
+        "%A" can be used for absolute time it's due.
+    <late str> is the format for late messages.
+        The formats are the same as for <ots>.
