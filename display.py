@@ -24,8 +24,6 @@ def time_format(time):
 
 def task_format(task,code):
     length = len(task[0])
-    # Together with the double dash,
-    # this makes 32 characters before the status.
     if length > 30:
         namestr = task[0][0:27] + "..."
     else:
