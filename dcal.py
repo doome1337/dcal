@@ -43,12 +43,12 @@ if __name__ == '__main__':
     addtask_parser.add_argument('-s','--status',nargs='?',default='inc',
             type=str,help='status of task to append.')
     addtask_parser.set_defaults(func=addtask.add_task)
-    init_parser = subparsers.add_parser('initialize',aliases=['init'],
+    """init_parser = subparsers.add_parser('initialize',aliases=['init'],
             description='Initialize all necessary files to their defaults.')
     init_parser.add_argument('-f',"--files",nargs=3,
             default=[cal_file,gen_file,code_file],
             help='which folder to initialize the files in. '+
             'The order is cal_file, gen_file, code_file.')
-    init_parser.set_defaults(func=init.init)
+    init_parser.set_defaults(func=init.init)"""
     args = parser.parse_args()
     args.func(args)
