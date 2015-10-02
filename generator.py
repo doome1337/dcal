@@ -16,6 +16,7 @@ def date_gen(event):
 def gen_events(args):
     gen_file = args.source_file
     event_file = args.cal_file
+    open(gen_file, "a").close()
     with open(gen_file,'r') as schedule, open(event_file,'a') as calendar:
         events = schedule.readlines()
         for event in events:

@@ -44,6 +44,8 @@ def display(args):
     print ("")
     print ("Today is " + now.isoformat(' '))
     print ("-----")
+    open(file_name, "a").close()
+    open(task_codes_file,"a").close()
     with open(file_name,"r") as calendar, \
         open(task_codes_file,'r') as task_codes:
         lines = [x.strip().split(',') for x in set(calendar.readlines())]
