@@ -7,28 +7,34 @@ if __name__ == '__main__':
     import clean
     import generator
     import addtask
+    import init
     import argparse
+    from os.path import expanduser
+    home = expanduser("~")
+    cal_file = home+'/.dcal'
+    gen_file = home+'/.dcalgen'
+    code_file = home+'/.dcalcode'
     parser = argparse.ArgumentParser(description='Calendar Utility')
     subparsers = parser.add_subparsers()
     display_parser = subparsers.add_parser('display',aliases=['dis'])
-    display_parser.add_argument('cal_file',type=str,
+    display_parser.add_argument('--cal_file',type=str,default=cal_file,
             help='calendar file to display.')
-    display_parser.add_argument('format_file')
+    display_parser.add_argument('--format_file',type=str,default=code_file)
     display_parser.set_defaults(func=display.display)
     clean_parser = subparsers.add_parser('clean')
-    clean_parser.add_argument('cal_file',type=str,
+    clean_parser.add_argument('--cal_file',type=str,default=cal_file,
             help='calendar file to clean.')
-    clean_parser.add_argument('format_file',type=str,
+    clean_parser.add_argument('--format_file',type=str,default=code_file,
             help='format file containing all event types.')
     clean_parser.set_defaults(func=clean.clean)
     gen_parser = subparsers.add_parser('generate',aliases=['gen'])
-    gen_parser.add_argument('source_file',type=str,
+    gen_parser.add_argument('--source_file',type=str,default=gen_file,
             help='source file from which the recurring events are loaded.')
-    gen_parser.add_argument('cal_file',type=str,
+    gen_parser.add_argument('--cal_file',type=str,default=cal_file,
             help='calendar file to which to write the recurring tasks.')
     gen_parser.set_defaults(func=generator.gen_events)
     addtask_parser = subparsers.add_parser('add')
-    addtask_parser.add_argument('cal_file',type=str,
+    addtask_parser.add_argument('--cal_file',type=str,default=cal_file,
             help='calendar file to which to write the task.')
     addtask_parser.add_argument('task_name',type=str,
             help='name of event or task to complete.')
@@ -37,5 +43,12 @@ if __name__ == '__main__':
     addtask_parser.add_argument('-s','--status',nargs='?',default='inc',
             type=str,help='status of task to append.')
     addtask_parser.set_defaults(func=addtask.add_task)
+    init_parser = subparsers.add_parser('initialize',aliases=['init'],
+            description='Initialize all necessary files to their defaults.')
+    init_parser.add_argument('-f',"--files",nargs=3,
+            default=[cal_file,gen_file,code_file],
+            help='which folder to initialize the files in. '+
+            'The order is cal_file, gen_file, code_file.')
+    init_parser.set_defaults(func=init.init)
     args = parser.parse_args()
     args.func(args)
