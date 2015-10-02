@@ -13,11 +13,14 @@ def date_gen(event):
             .strftime('%Y,%m,%d,%H,%M,%S'))
     return event[0]+','+event_dt+',rec\n'
 
-def gen_events(gen_file,event_file):
+def gen_events(args):
+    gen_file = args.source_file
+    event_file = args.cal_file
     with open(gen_file,'r') as schedule, open(event_file,'a') as calendar:
         events = schedule.readlines()
         for event in events:
             calendar.write(date_gen(event.strip().split(',')))
 
 if __name__ == '__main__':
-    gen_events(sys.argv[1],sys.argv[2])
+    #gen_events(sys.argv[1],sys.argv[2])
+    pass

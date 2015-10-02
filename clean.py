@@ -1,6 +1,6 @@
 import datetime
 
-def clean(file_name,task_code_file):
+def clean(args):
     """Clean-up for planner files.
 
     Removes any tasks whose priority is above a certain amount.
@@ -26,8 +26,10 @@ def clean(file_name,task_code_file):
     MAT157 Non-Standard Lecture... -- Incomplete. 09:04:42:03 left.
     MAT157 Problem Set 2           -- To be revised. 00:03:42:03 left.
     """
+    file_name = args.cal_file
+    task_code_file = args.format_file
     with open(file_name,'r') as calendar,open(task_code_file,'r') as code_file:
-        lines = calendar.readlines()
+        lines = set(calendar.readlines())
         codes = map(lambda x: x.split(','),code_file.readlines())
         ots_remove = {}
         late_remove = {}
@@ -46,12 +48,13 @@ def clean(file_name,task_code_file):
                 calendar.write(line)
 
 if __name__ == '__main__':
-    import sys
-    import os
-    __DEBUG__ = False
-    if __DEBUG__:
-        import display
-        display.display(sys.argv[1],sys.argv[2])
-    clean(sys.argv[1],sys.argv[2])
-    if __DEBUG__:
-        display.display(sys.argv[1],sys.argv[2])
+    #import sys
+    #import os
+    #__DEBUG__ = False
+    #if __DEBUG__:
+    #    import display
+    #    display.display(sys.argv[1],sys.argv[2])
+    #clean(sys.argv[1],sys.argv[2])
+    #if __DEBUG__:
+    #    display.display(sys.argv[1],sys.argv[2])
+    pass

@@ -31,20 +31,23 @@ def task_format(task,code):
     curstr = namestr.join(code.split('%N'))
     timestr = time_format(task[2])
     curstr = timestr.join(curstr.split('%T'))
-    atimestr = task[3].isoformat(',')
+    atimestr = task[3].isoformat(' ')
     return atimestr.join(curstr.split('%A'))
 
-def display(file_name, task_codes_file):
+def display(args):
+    file_name = args.cal_file
+    task_codes_file = args.format_file
     now = datetime.datetime.now()
     events = []
     priorities = {}
+    codes = []
     print ("")
-    print ("Today is " + str(now))
+    print ("Today is " + now.isoformat(' '))
     print ("-----")
     with open(file_name,"r") as calendar, \
         open(task_codes_file,'r') as task_codes:
-        lines = map(lambda x:x.strip().split(','),calendar.readlines())
-        codes = map(lambda x:x.strip().split(','),task_codes.readlines())
+        lines = [x.strip().split(',') for x in set(calendar.readlines())]
+        codes = [x.strip().split(',') for x in task_codes.readlines()]
         for code in codes:
             priorities[code[0]]=int(code[3])
         for line in lines:
@@ -63,10 +66,11 @@ def display(file_name, task_codes_file):
         for code in codes:
             if event[1] == code[0]:
                 if event[2] > datetime.timedelta(0):
-                    print task_format(event,code[4])
+                    print (task_format(event,code[4]))
                 else:
-                    print task_format(event[0:2]+[-event[2]]+event[3:],code[5])
+                    print (task_format(event[0:2]+[-event[2]]+event[3:],code[5]))
     print ("")
 
 if __name__ == '__main__':
-    display(sys.argv[1], sys.argv[2])
+    #display(sys.argv[1], sys.argv[2])
+    pass
