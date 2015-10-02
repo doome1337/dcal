@@ -53,11 +53,12 @@ def display(args):
         for code in codes:
             priorities[code[0]]=int(code[3])
         for line in lines:
-            due_date = datetime.datetime(int(line[1]),
-                    int(line[2]),int(line[3]),int(line[4]),
-                    int(line[5]),int(line[6]))
-            until = due_date - now
-            events.append([line[0],line[7],until,due_date])
+            if priorities[line[7]] >= args.priority:
+                due_date = datetime.datetime(int(line[1]),
+                        int(line[2]),int(line[3]),int(line[4]),
+                        int(line[5]),int(line[6]))
+                until = due_date - now
+                events.append([line[0],line[7],until,due_date])
     for i in range(len(events)):
         for j in range(i,len(events)):
             if (priorities[events[i][1]] < priorities[events[j][1]]) or \

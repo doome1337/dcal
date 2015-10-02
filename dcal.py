@@ -20,6 +20,10 @@ if __name__ == '__main__':
     display_parser.add_argument('--cal_file',type=str,default=cal_file,
             help='calendar file to display.')
     display_parser.add_argument('--format_file',type=str,default=code_file)
+    display_parser.add_argument('-p','--priority',nargs='?',
+            type=int,default=0,const=10,
+            help='Display only tasks with a certain priority. '+
+            'Currently, priority is determined by task type.')
     display_parser.set_defaults(func=display.display)
     clean_parser = subparsers.add_parser('clean')
     clean_parser.add_argument('--cal_file',type=str,default=cal_file,
