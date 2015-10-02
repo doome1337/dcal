@@ -6,9 +6,10 @@ if __name__ == '__main__':
     import display
     import clean
     import generator
+    import addtask
     import argparse
     parser = argparse.ArgumentParser(description='Calendar Utility')
-    subparsers = parser.add_subparsers(metavar="display,clean,generate")
+    subparsers = parser.add_subparsers()
     display_parser = subparsers.add_parser('display',aliases=['dis'])
     display_parser.add_argument('cal_file')
     display_parser.add_argument('format_file')
@@ -21,5 +22,10 @@ if __name__ == '__main__':
     gen_parser.add_argument('source_file')
     gen_parser.add_argument('cal_file')
     gen_parser.set_defaults(func=generator.gen_events)
+    addtask_parser = subparsers.add_parser('add')
+    addtask_parser.add_argument('cal_file')
+    addtask_parser.add_argument('task_name')
+    addtask_parser.add_argument('time',nargs=6)
+    addtask_parser.set_defaults(func=addtask.add_task)
     args = parser.parse_args()
     args.func(args)
