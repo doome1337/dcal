@@ -29,7 +29,7 @@ def clean(args):
     file_name = args.cal_file
     task_code_file = args.format_file
     open(file_name, "a").close()
-    open(task_codes_file,"a").close()
+    open(task_code_file,"a").close()
     with open(file_name,'r') as calendar,open(task_code_file,'r') as code_file:
         lines = set(calendar.readlines())
         codes = map(lambda x: x.split(','),code_file.readlines())
