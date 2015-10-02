@@ -30,7 +30,9 @@ def task_format(task,code):
         namestr = task[0] + (" "*(30-length))
     curstr = namestr.join(code.split('%N'))
     timestr = time_format(task[2])
-    return timestr.join(curstr.split('%T'))
+    curstr = timestr.join(curstr.split('%T'))
+    atimestr = task[3].isoformat(',')
+    return atimestr.join(curstr.split('%A'))
 
 def display(file_name, task_codes_file):
     now = datetime.datetime.now()
@@ -50,13 +52,12 @@ def display(file_name, task_codes_file):
                     int(line[2]),int(line[3]),int(line[4]),
                     int(line[5]),int(line[6]))
             until = due_date - now
-            events.append([line[0],line[7],until])
-    print priorities
+            events.append([line[0],line[7],until,due_date])
     for i in range(len(events)):
         for j in range(i,len(events)):
-            if (priorities[events[i][1]] > priorities[events[j][1]]) or \
+            if (priorities[events[i][1]] < priorities[events[j][1]]) or \
                     (events[i][2] > events[j][2] and \
-                    not priorities[events[i][1]] < priorities[events[j][1]]):
+                    not priorities[events[i][1]] > priorities[events[j][1]]):
                 events[i],events[j] = events[j],events[i]
     for event in events:
         for code in codes:
@@ -64,7 +65,7 @@ def display(file_name, task_codes_file):
                 if event[2] > datetime.timedelta(0):
                     print task_format(event,code[4])
                 else:
-                    print task_format(event[0:-1]+[-event[-1]],code[5])
+                    print task_format(event[0:2]+[-event[2]]+event[3:],code[5])
     print ("")
 
 if __name__ == '__main__':
