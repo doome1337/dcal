@@ -11,10 +11,10 @@ def date_gen(event):
         event_date = now[0:2]+event[1:]
     event_dt = (datetime.datetime.strptime(','.join(event_date),'%Y,%U,%w,%H,%M,%S')
             .strftime('%Y,%m,%d,%H,%M,%S'))
-    return event[0]+','+event_dt+',-1\n'
+    return event[0]+','+event_dt+',rec\n'
 
 def gen_events(gen_file,event_file):
-    with open(gen_file,'r') as schedule, open(event_file,'a'):
+    with open(gen_file,'r') as schedule, open(event_file,'a') as calendar:
         events = schedule.readlines()
         for event in events:
             calendar.write(date_gen(event.strip().split(',')))
