@@ -12,6 +12,7 @@ if __name__ == '__main__':
     import addtask
     import init
     import remove
+    import update
 
     # Import modules no in dcal.
     import argparse
@@ -84,5 +85,33 @@ if __name__ == '__main__':
             const='in',dest='mode',
             help='Remove any tasks that contain the given string.')
     rem_parser.set_defaults(func=remove.remove,mode='equal',case=False)
+    update_parser = subparsers.add_parser('update',aliases=['upd'])
+    update_parser.add_argument('task_name',type=str,
+            help='name of even or task to update.')
+    update_parser.add_argument('--cal_file',type=str,default=cal_file,
+            help='calendar file to update.')
+    update_parser.add_argument('-t','--time',nargs=6,type=int,
+            help='Update the time.')
+    update_parser.add_argument('-S','--status',type=str,
+            help='Update the status.')
+    update_case = update_parser.add_mutually_exclusive_group()
+    update_case.add_argument('-c','--case',action='store_const',
+            const=True,dest='case',
+            help='Enable case-sensitivity.')
+    update_case.add_argument('-I','--icase',action='store_const',
+            const=False,dest='case',
+            help='Enable case-insensitivity. This is the default')
+    update_mode = update_parser.add_mutually_exclusive_group()
+    update_mode.add_argument('-s','--startswith',action='store_const',
+            const='start',dest='mode',
+            help='Update any tasks that start with the given string.')
+    update_mode.add_argument('-e','--equals',action='store_const',
+            const='equal',dest='mode',
+            help='Update any tasks that exactly match the given string. '+
+            'This is the default mode.')
+    update_mode.add_argument('-i','--in',action='store_const',
+            const='in',dest='mode',
+            help='Update any tasks that contain the given string.')
+    update_parser.set_defaults(func=update.update,mode='equa',case=False)
     args = parser.parse_args()
     args.func(args)
