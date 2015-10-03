@@ -3,11 +3,17 @@
 # This is the main file. 
 # It shouldn't do anything when it isn't main.
 if __name__ == '__main__':
+    # Import other files in dcal.
+    # Maybe I should clean this up.
+    # Although having one file would be a bit messy...
     import display
     import clean
     import generator
     import addtask
     import init
+    import remove
+
+    # Import modules no in dcal.
     import argparse
     from os.path import expanduser
     home = expanduser("~")
@@ -38,12 +44,12 @@ if __name__ == '__main__':
             help='calendar file to which to write the recurring tasks.')
     gen_parser.set_defaults(func=generator.gen_events)
     addtask_parser = subparsers.add_parser('add')
-    addtask_parser.add_argument('--cal_file',type=str,default=cal_file,
-            help='calendar file to which to write the task.')
     addtask_parser.add_argument('task_name',type=str,
             help='name of event or task to complete.')
     addtask_parser.add_argument('time',nargs=6,type=int,
             help='time of event in the form YYYY MM DD HH MM SS.')
+    addtask_parser.add_argument('--cal_file',type=str,default=cal_file,
+            help='calendar file to which to write the task.')
     addtask_parser.add_argument('-s','--status',nargs='?',default='inc',
             type=str,help='status of task to append.')
     addtask_parser.set_defaults(func=addtask.add_task)
@@ -54,5 +60,29 @@ if __name__ == '__main__':
             help='which folder to initialize the files in. '+
             'The order is cal_file, gen_file, code_file.')
     init_parser.set_defaults(func=init.init)"""
+    rem_parser = subparsers.add_parser('remove',aliases=['rem'])
+    rem_parser.add_argument('task_name',type=str,
+            help='name of event or task to remove')
+    rem_parser.add_argument('--cal_file',type=str,default=cal_file,
+            help='calendar file from which to remove the task.')
+    rem_case = rem_parser.add_mutually_exclusive_group()
+    rem_case.add_argument('-c','--case',action='store_const',
+            const=True,dest='case',
+            help='Enable case-sensitivity.')
+    rem_case.add_argument('-I','--icase',action='store_const',
+            const=False,dest='case',
+            help='Enable case-insensitivity. This is the default')
+    rem_mode = rem_parser.add_mutually_exclusive_group()
+    rem_mode.add_argument('-s','--startswith',action='store_const',
+            const='start',dest='mode',
+            help='Remove any tasks that start with the given string.')
+    rem_mode.add_argument('-e','--equals',action='store_const',
+            const='equal',dest='mode',
+            help='Remove any tasks that exactly match the given string. '+
+            'This is the default mode.')
+    rem_mode.add_argument('-i','--in',action='store_const',
+            const='in',dest='mode',
+            help='Remove any tasks that contain the given string.')
+    rem_parser.set_defaults(func=remove.remove,mode='equal',case=False)
     args = parser.parse_args()
     args.func(args)
