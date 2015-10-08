@@ -22,7 +22,7 @@ def update(args):
                 if args.time == None:
                     time = line_components[1:7]
                 else:
-                    time = [int(x) for x in args.time]
+                    time = [str(x) for x in args.time]
                 if args.status == None:
                     status = line_components[7:]
                 else:
