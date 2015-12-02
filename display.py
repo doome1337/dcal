@@ -1,5 +1,5 @@
 import datetime
-import sys
+
 
 def time_format(time):
     """Formats a timedelta in the form DD:HH:MM:SS.
@@ -22,7 +22,8 @@ def time_format(time):
     days += d
     return "%02d:%02d:%02d:%02d" % (days, hours, minutes, seconds)
 
-def task_format(task,code):
+
+def task_format(task, code):
     length = len(task[0])
     if length > 30:
         namestr = task[0][0:27] + "..."
@@ -33,6 +34,7 @@ def task_format(task,code):
     curstr = timestr.join(curstr.split('%T'))
     atimestr = task[3].isoformat(' ')
     return atimestr.join(curstr.split('%A'))
+
 
 def display(args):
     file_name = args.cal_file
@@ -45,35 +47,32 @@ def display(args):
     print ("Today is " + now.isoformat(' '))
     print ("-----")
     open(file_name, "a").close()
-    open(task_codes_file,"a").close()
-    with open(file_name,"r") as calendar, \
-        open(task_codes_file,'r') as task_codes:
+    open(task_codes_file, "a").close()
+    with open(file_name, "r") as calendar, \
+            open(task_codes_file, 'r') as task_codes:
         lines = [x.strip().split(',') for x in set(calendar.readlines())]
         codes = [x.strip().split(',') for x in task_codes.readlines()]
         for code in codes:
-            priorities[code[0]]=int(code[3])
+            priorities[code[0]] = int(code[3])
         for line in lines:
             if priorities[line[7]] >= args.priority:
-                due_date = datetime.datetime(int(line[1]),
-                        int(line[2]),int(line[3]),int(line[4]),
-                        int(line[5]),int(line[6]))
+                due_date = datetime.datetime(
+                    int(line[1]), int(line[2]), int(line[3]),
+                    int(line[4]), int(line[5]), int(line[6]))
                 until = due_date - now
-                events.append([line[0],line[7],until,due_date])
+                events.append([line[0], line[7], until, due_date])
     for i in range(len(events)):
-        for j in range(i,len(events)):
+        for j in range(i, len(events)):
             if (priorities[events[i][1]] < priorities[events[j][1]]) or \
-                    (events[i][2] > events[j][2] and \
-                    not priorities[events[i][1]] > priorities[events[j][1]]):
-                events[i],events[j] = events[j],events[i]
+                    (events[i][2] > events[j][2] and
+                     not priorities[events[i][1]] > priorities[events[j][1]]):
+                events[i], events[j] = events[j], events[i]
     for event in events:
         for code in codes:
             if event[1] == code[0]:
                 if event[2] > datetime.timedelta(0):
-                    print (task_format(event,code[4]))
+                    print (task_format(event, code[4]))
                 else:
-                    print (task_format(event[0:2]+[-event[2]]+event[3:],code[5]))
+                    print (task_format(event[0:2] + [-event[2]] + event[3:],
+                                       code[5]))
     print ("")
-
-if __name__ == '__main__':
-    #display(sys.argv[1], sys.argv[2])
-    pass

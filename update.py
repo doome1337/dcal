@@ -27,5 +27,5 @@ def update(args):
                 if args.status is None:
                     status = line_components[7:]
                 else:
-                    status = [args.status]
-                calendar.write(','.join(line_components[0:1]+time+status)+'\n')
+                    status = [args.status+'\n']
+                calendar.write(','.join(line_components[0:1]+time+status))

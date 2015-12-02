@@ -1,0 +1,28 @@
+Implement inter: Interactive mode.
+Implement add-rec: Add recurring tasks.
+    Addendum: Implement management of recurring tasks in general.
+Implement categories: Add setting of tasks into categories during addition,
+    and during display.
+    Have -p be shorthand for the special -c 'priority' category.
+Figure out if Google Calendar has an API.
+Figure out how to add this to the path
+    without relying on setting the path to the containing folder.
+
+About categories:
+    We have infrastructure in place already:
+        The task codes.
+    We can rebuild those.
+    Make the str-format be based by searching through the list of cats,
+        and picking the first where the code is contained in the task-cat.
+        Make the last one be "".
+        Thus, every task will have some match used for display.
+        CODE:
+        for every task:
+            for every code:
+                if code in task.code:
+                    format = code.format
+        last code is "", guaranteeing a match.
+        By doing this, we have easy subcategories.
+        Has weakness of possible accidental overlap.
+    Priority should be in order it appears in ~/.dcalcode
+    Should probably represent it via "cat1/cat2/cat3/..." for multiple cats.

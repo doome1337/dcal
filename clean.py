@@ -1,5 +1,6 @@
 import datetime
 
+
 def clean(args):
     """Clean-up for planner files.
 
@@ -29,10 +30,11 @@ def clean(args):
     file_name = args.cal_file
     task_code_file = args.format_file
     open(file_name, "a").close()
-    open(task_code_file,"a").close()
-    with open(file_name,'r') as calendar,open(task_code_file,'r') as code_file:
+    open(task_code_file, "a").close()
+    with open(file_name, 'r') as calendar, \
+            open(task_code_file, 'r') as code_file:
         lines = set(calendar.readlines())
-        codes = map(lambda x: x.split(','),code_file.readlines())
+        codes = map(lambda x: x.split(','), code_file.readlines())
         ots_remove = {}
         late_remove = {}
         remove = {}
@@ -42,21 +44,10 @@ def clean(args):
             late_remove[code[0]] = bool(int(code[2]))
         for line in lines:
             task_code = line.strip().split(',')[-1]
-            remove[line] = ots_remove[task_code] or (late_remove[task_code] and
-                    ','.join(line.split(',')[1:7]) < now_str)
-    with open(file_name,'w') as calendar:
+            remove[line] = ots_remove[task_code] or (
+                late_remove[task_code] and
+                ','.join(line.split(',')[1:7]) < now_str)
+    with open(file_name, 'w') as calendar:
         for line in lines:
             if not remove[line]:
                 calendar.write(line)
-
-if __name__ == '__main__':
-    #import sys
-    #import os
-    #__DEBUG__ = False
-    #if __DEBUG__:
-    #    import display
-    #    display.display(sys.argv[1],sys.argv[2])
-    #clean(sys.argv[1],sys.argv[2])
-    #if __DEBUG__:
-    #    display.display(sys.argv[1],sys.argv[2])
-    pass
