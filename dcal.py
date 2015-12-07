@@ -6,12 +6,12 @@ if __name__ == '__main__':
     # Import other files in dcal.
     # Maybe I should clean this up.
     # Although having one file would be a bit messy...
-    import display
-    import clean
-    import generator
-    import addtask
-    import remove
-    import update
+    import dcal_display
+    import dcal_clean
+    import dcal_gen
+    import dcal_add
+    import dcal_remove
+    import dcal_update
 
     # Import modules no in dcal.
     import argparse
@@ -32,7 +32,7 @@ if __name__ == '__main__':
         type=int, default=0, const=10,
         help='Display only tasks with a certain priority. ' +
         'Currently,  priority is determined by task type.')
-    display_parser.set_defaults(func=display.display)
+    display_parser.set_defaults(func=dcal_display.display)
     clean_parser = subparsers.add_parser('clean')
     clean_parser.add_argument(
         '--cal_file', type=str, default=cal_file,
@@ -40,7 +40,7 @@ if __name__ == '__main__':
     clean_parser.add_argument(
         '--format_file', type=str, default=code_file,
         help='format file containing all event types.')
-    clean_parser.set_defaults(func=clean.clean)
+    clean_parser.set_defaults(func=dcal_clean.clean)
     gen_parser = subparsers.add_parser('generate', aliases=['gen'])
     gen_parser.add_argument(
         '--source_file', type=str, default=gen_file,
@@ -48,7 +48,7 @@ if __name__ == '__main__':
     gen_parser.add_argument(
         '--cal_file', type=str, default=cal_file,
         help='calendar file to which to write the recurring tasks.')
-    gen_parser.set_defaults(func=generator.gen_events)
+    gen_parser.set_defaults(func=dcal_gen.gen_events)
     addtask_parser = subparsers.add_parser('add')
     addtask_parser.add_argument(
         'task_name', type=str,
@@ -62,7 +62,7 @@ if __name__ == '__main__':
     addtask_parser.add_argument(
         '-s', '--status', nargs='?', default='inc',
         type=str, help='status of task to append.')
-    addtask_parser.set_defaults(func=addtask.add_task)
+    addtask_parser.set_defaults(func=dcal_add.add_task)
     rem_parser = subparsers.add_parser('remove', aliases=['rem'])
     rem_parser.add_argument(
         'task_name', type=str,
@@ -93,7 +93,7 @@ if __name__ == '__main__':
         '-i', '--in', action='store_const',
         const='in', dest='mode',
         help='Remove any tasks that contain the given string.')
-    rem_parser.set_defaults(func=remove.remove, mode='equal', case=False)
+    rem_parser.set_defaults(func=dcal_remove.remove, mode='equal', case=False)
     update_parser = subparsers.add_parser('update', aliases=['upd'])
     update_parser.add_argument(
         'task_name', type=str,
@@ -130,6 +130,8 @@ if __name__ == '__main__':
         '-i', '--in', action='store_const',
         const='in', dest='mode',
         help='Update any tasks that contain the given string.')
-    update_parser.set_defaults(func=update.update, mode='equa', case=False)
+    update_parser.set_defaults(
+        func=dcal_update.update,
+        mode='equa', case=False)
     args = parser.parse_args()
     args.func(args)
